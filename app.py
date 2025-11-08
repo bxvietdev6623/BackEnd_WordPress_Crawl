@@ -12,6 +12,7 @@ import sys
 # ---------------- CONFIG ----------------
 BASE_STORE_URL = "https://www.tadu.com/store/98-a-0-15-a-20-p-{page}-909"
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; TaduIDBot/1.0)"}
+NUM_CHAPTERS = 5  # số chương mặc định nếu không truyền từ frontend
 DATA_DIR = Path("data")
 DATA_DIR.mkdir(exist_ok=True)
 
@@ -194,6 +195,9 @@ def crawl_api():
     book_ids = get_book_ids(page_num)
     if not book_ids:
         return jsonify({"error": "Không tìm thấy book nào."}), 404
+
+    # Giới hạn tối đa 10 truyện mỗi lần crawl
+    book_ids = book_ids[:10]
 
     results = []
     errors = []
